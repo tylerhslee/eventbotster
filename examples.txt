@@ -1,0 +1,12 @@
+"""
+Write the name of the intent in the first line, followed by a newline.
+The intent name must be in upper-camel case & should end with the word "Intent".
+"""
+
+AnyEventOnDayIntent
+What is happening {modifier} {dayOfWeek}?
+
+SpecificEventOnDayIntent
+Is there a {eventType} {modifier} {dayOfWeek}?
+Is there a {eventType} happening {modifier} {dayOfWeek}?
+

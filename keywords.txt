@@ -1,0 +1,14 @@
+"""
+Write the name of the keyword set in the first line, followed by a newline.
+The keyword name must be in lower-camel case.
+Each keyword must be delimited by a newline.
+"""
+
+dayOfWeek
+monday,tuesday,wednesday,thursday,friday,saturday,sunday
+
+modifier
+this,next
+
+eventType
+concert,movie
