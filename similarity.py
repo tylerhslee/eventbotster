@@ -13,20 +13,15 @@ from parser import intents
 nlp = spacy.load('en')
 
 
-def take_usr_input():
-    text = str(input('Message: '))
-    return nlp(text)
-
-
-def calculate_mean(usr, intent_name):
+def calculate_similarity(usr, intent_name):
     return np.array([usr.similarity(nlp(ex)) for ex in intents[intent_name]]) \
-            .mean()
+            .max()
 
 
 def analyze_similarities(usr):
     ret = {}
     for name in intents.keys():
-        ret[name] = calculate_mean(usr, name)
+        ret[name] = calculate_similarity(usr, name)
     return ret
 
 

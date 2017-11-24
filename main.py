@@ -2,7 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from handlers import any_event_on_day_intent_handler
-from similarity import take_usr_input, select_most_likely_intent
+from similarity import select_most_likely_intent, nlp
+
+
+def take_usr_input():
+    text = str(input('Message: ')).lower()
+    return nlp(text)
+
 
 usr = take_usr_input()
 intent = select_most_likely_intent(usr)
