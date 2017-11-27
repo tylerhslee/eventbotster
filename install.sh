@@ -1,5 +1,7 @@
 #! /bin/bash
 
+sudo apt-get install virtualenv
+
 cd "$(dirname "$0")"
 
 VIRTUALENV=.venv
