@@ -20,7 +20,7 @@ def add_days(days, tz=timezone.utc):
 
 
 # Export
-DAY_OF_WEEK = {'monday': 0,
+DAYS_OF_WEEK = {'monday': 0,
                'tuesday': 1,
                'wednesday': 2,
                'thursday': 3,
@@ -28,5 +28,5 @@ DAY_OF_WEEK = {'monday': 0,
                'saturday': 5,
                'sunday': 6}
 
-MODIFIER = {'this': 0,
+MODIFIERS = {'this': 0,
             'next': 1}
