@@ -13,15 +13,21 @@ from parser import intents
 nlp = spacy.load('en')
 
 
+def preprocess_text(s):
+    doc = nlp(s)
+    return nlp(' '.join([t.lemma_ for t in doc if t.pos_ != 'PUNCT']))
+
+
 def calculate_similarity(usr, intent_name):
-    return np.array([usr.similarity(nlp(ex)) for ex in intents[intent_name]]) \
-            .max()
+    return np.array([usr.similarity(preprocess_text(ex))  \
+                    for ex in intents[intent_name]]).max()
 
 
 def analyze_similarities(usr):
     ret = {}
     for name in intents.keys():
         ret[name] = calculate_similarity(usr, name)
+    print(ret)
     return ret
 
 
@@ -30,7 +36,7 @@ def select_most_likely_intent(usr):
     max_sim = max(list(sims.values()))
     
     # Not similar enough
-    if max_sim < 0.5:
+    if max_sim < 0.95:
         return None
 
     for name, sim in sims.items():

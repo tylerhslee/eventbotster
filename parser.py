@@ -7,6 +7,7 @@ All keyword labels should be annotated separately so that the lists can be used
 for supervised learning.
 """
 import re
+
 from pprint import PrettyPrinter
 
 with open('examples.txt', 'r') as rf:

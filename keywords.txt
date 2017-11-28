@@ -11,4 +11,4 @@ modifier
 this,next
 
 eventType
-concert,movie
+concert,movie,play,exhibition,sports,sport games

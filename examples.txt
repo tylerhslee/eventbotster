@@ -9,4 +9,6 @@ What is happening {modifier} {dayOfWeek}?
 SpecificEventOnDayIntent
 Is there a {eventType} {modifier} {dayOfWeek}?
 Is there a {eventType} happening {modifier} {dayOfWeek}?
+What {eventType} is happening {modifier} {dayOfWeek}?
+Which {eventType} is happening {modifier} {dayOfWeek}?
 
