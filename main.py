@@ -3,8 +3,9 @@
 import argparse
 
 from handlers import any_event_on_day_intent_handler,  \
-                     specific_event_on_day_intent_handler
-from similarity import preprocess_text, select_most_likely_intent
+                     specific_event_on_day_intent_handler, \
+                     event_info_intent_handler
+from nlp import preprocess_text, select_most_likely_intent
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter(indent=2)
@@ -34,6 +35,11 @@ def main(debug=False):
     
     elif intent == 'SpecificEventOnDayIntent':
         data = specific_event_on_day_intent_handler(usr)
+        if debug:
+            pp.pprint(data)
+    
+    elif intent == 'EventInfoIntent':
+        data = event_info_intent_handler(usr)
         if debug:
             pp.pprint(data)
 

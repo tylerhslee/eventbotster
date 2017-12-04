@@ -6,7 +6,13 @@ Handles each intent defined in examples.txt
 from parser import keywords, parse_keywords
 from dates import DAYS_OF_WEEK, MODIFIERS, date_diff, add_days
 from tm import get_info
-from database import find_table, store_data
+from database import extract_columns, store_data, find_data
+from nlp import preprocess_text
+
+
+def format_time(dt):
+    dt = dt.replace(hour=0, minute=0, second=0, microsecond=0)
+    return dt.strftime('%Y-%m-%dT%H:%m:%SZ')
 
 
 def any_event_on_day_intent_handler(doc):
@@ -21,13 +27,12 @@ def any_event_on_day_intent_handler(doc):
             dow = DAYS_OF_WEEK[tok.text]
 
     diff = date_diff(modifier, dow)
-    target_date = add_days(diff)  # Add timezone info
+    target_date = format_time(add_days(diff))  # Add timezone info
 
-    data = find_table(start_date=target_date)
-    if len(data.keys()) == 0:
-        r = get_info(date=target_date)
-        store_data(r.json())
-        return r.json()
+    r = get_info(startDateTime=target_date)
+    data = extract_columns(r.json())
+    data['std_time'] = target_date
+    store_data(data)
     return data
 
 
@@ -49,5 +54,21 @@ def specific_event_on_day_intent_handler(doc):
     diff = date_diff(modifier, dow)
     target_date = add_days(diff)  # Add timezone info
 
-    r = get_info(date=target_date, keyword=et)
-    return r.json()
+    r = get_info(startDateTime=format_time(target_date, False), keyword=et)
+    data = extract_columns(r.json())
+    data['std_time'] = target_date
+    store_data(data)
+    return data
+
+
+def event_info_intent_handler(doc):
+    """
+    Handles EventInfoIntent
+    Gives the information on an event from the database
+    If the event is not found in the database, it will fetch the API.
+    """
+    for title in parse_keywords(keywords, 'title'):
+        if str(preprocess_text(title)) in str(doc):
+            data = find_data(title=title)
+            return data
+

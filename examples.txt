@@ -12,3 +12,5 @@ Is there a {eventType} happening {modifier} {dayOfWeek}?
 What {eventType} is happening {modifier} {dayOfWeek}?
 Which {eventType} is happening {modifier} {dayOfWeek}?
 
+EventInfoIntent
+Tell me about {title}.

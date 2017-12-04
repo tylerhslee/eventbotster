@@ -1,11 +1,14 @@
-
+# -*- coding: utf-8 -*-
+'''
+Connect to the database
+'''
 import urllib.request, json
 import pandas as pd
 import MySQLdb as mdb
 
 con = mdb.connect(host = 'localhost',
                   user = 'root',
-                  passwd = 'dwdstudent2015',
+                  passwd = 'Mr.bean22',
                   charset='utf8', use_unicode=True);
 
 # Run a query to create a database that will hold the data
@@ -15,14 +18,14 @@ create_db_query = "CREATE DATABASE IF NOT EXISTS {db} DEFAULT CHARACTER SET 'utf
 # Create a database
 cursor = con.cursor()
 cursor.execute(create_db_query)
-cursor.close()
 
-cursor = con.cursor()
 table_name = 'event_bot'
 create_table_query = '''CREATE TABLE IF NOT EXISTS {db}.{table}
-                                (title VARCHAR(100),
+                                (id int NOT NULL AUTO_INCREMENT,
+                                title VARCHAR(100),
                                 url VARCHAR(1000),
                                 start_time VARCHAR(100),
+                                std_time VARCHAR(100),
                                 category VARCHAR(100),
                                 min_price VARCHAR(100),
                                 max_price VARCHAR(100),
@@ -30,11 +33,21 @@ create_table_query = '''CREATE TABLE IF NOT EXISTS {db}.{table}
                                 venue VARCHAR(100),
                                 lon VARCHAR(100),
                                 lat VARCHAR(100),
-                                PRIMARY KEY(title)
+                                PRIMARY KEY(id)
                                 )'''.format(db=db_name, table=table_name)
 cursor.execute(create_table_query)
 cursor.close()
- In[199]:
+
+
+def get_titles():
+    cursor = con.cursor()
+    title_query = '''SELECT title FROM `final_project`.`event_bot`'''
+    cursor.execute(title_query)
+    con.commit()
+    data = cursor.fetchall()
+    titles = set([title.lower() for tup in data for title in tup])
+    cursor.close()
+    return ','.join(titles)
 
 
 def extract_columns(json):
@@ -67,9 +80,10 @@ def extract_columns(json):
 
 
 def store_data(json):
-    query_template = '''INSERT INTO {db}.{table}(title,
+    query_template = '''INSERT IGNORE INTO {db}.{table}(title,
                                             url,
                                             start_time,
+                                            std_time,
                                             category,
                                             min_price,
                                             max_price,
@@ -77,35 +91,54 @@ def store_data(json):
                                             venue,
                                             lon,
                                             lat)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''.format(db=db_name, table=table_name)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''.format(db=db_name, table=table_name)
     cursor = con.cursor()
 
     title = json['title']
-    url = json["url"]
+    url = json['url']
     start_time = json['start_time']
-    category = json["category"]
-    min_price = json["min_price"]
-    max_price = json["max_price"]
+    std_time = json['std_time']
+    category = json['category']
+    min_price = json['min_price']
+    max_price = json['max_price']
     zip_code = json['zip_code']
     venue = json['venue']
     lon = json['lon']
     lat = json['lat']
-    query_parameters = (title, url, start_time, category, min_price, max_price, zip_code, venue, lon, lat)
+    query_parameters = (title, url, start_time, std_time, category, min_price, max_price, zip_code, venue, lon, lat)
     cursor.execute(query_template, query_parameters)
 
     con.commit()
     cursor.close()
 
 
-def find_table(**kwargs):
-    f = ['%s=%s' % (k, kwargs[k]) for k in dict(kwargs).keys()]
-    query = '''SELECT * FROM `final_project`.`event_bot` WHERE %s'''.format(' AND '.join(f))
+def find_data(**kwargs):
+    f = ["%s='%s'" % (k, kwargs[k]) for k in dict(kwargs).keys()]
+    print(f)
+    query = '''SELECT * FROM `final_project`.`event_bot` WHERE {q}'''.format(q=' AND '.join(f))
     cursor = con.cursor()
     cursor.execute(query)
-    cursor.commit()
-    data = cursor.fetch()
+
+    con.commit()
+    data = cursor.fetchall()
+    ret = []
+    for (id, title, url, start_time, std_time, category, min_price, max_price, zip_code, venue, lon, lat) in data:
+        ret.append({
+            'id': id,
+            'title': title,
+            'url': url,
+            'start_time': start_time,
+            'std_time': std_time,
+            'category': category,
+            'min_price': min_price,
+            'max_price': max_price,
+            'zip_code': zip_code,
+            'venue': venue,
+            'lon': lon,
+            'lat': lat
+        })
     cursor.close()
-    return data
+    return ret
 
 
 if __name__ == '__main__':

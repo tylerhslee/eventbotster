@@ -35,8 +35,7 @@ def select_most_likely_intent(usr):
     sims = analyze_similarities(usr)
     max_sim = max(list(sims.values()))
     
-    # Not similar enough
-    if max_sim < 0.95:
+    if max_sim < 0.90:
         return None
 
     for name, sim in sims.items():

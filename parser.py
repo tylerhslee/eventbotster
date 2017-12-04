@@ -7,14 +7,23 @@ All keyword labels should be annotated separately so that the lists can be used
 for supervised learning.
 """
 import re
+import csv
 
 from pprint import PrettyPrinter
+from database import get_titles
+
+
+def add(original, *args):
+    content = '\n'.join(args)
+    ret = original + '\n' + content + ',.'
+    return ret
+
 
 with open('examples.txt', 'r') as rf:
     g_examples = rf.read()
 
 with open('keywords.txt', 'r') as rf:
-    g_keywords = rf.read()
+    g_keywords = add(rf.read(), 'title', get_titles())
 
 
 # General functions
@@ -151,8 +160,9 @@ def categorize_keywords():
                       get_keyword_names())
 
 
-def parse_keywords(keywords, name, delim=','):
-    return keywords[name][0].split(delim)
+def parse_keywords(keywords, name):
+    ret = [item for item in csv.reader(keywords[name])]
+    return ret[0]
 
 
 # Export

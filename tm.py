@@ -7,16 +7,9 @@ URL = ('https://app.ticketmaster.com/discovery/v2/events.json' +
        '&countryCode=US&stateCode=NY')
 
 
-def format_time(dt):
-    return dt.strftime('%Y-%m-%dT%H:%m:%SZ')
-
-
 def write_query(key, value):
-    fstring = '&{key}={value}'
-    if key == 'date':
-        return fstring.format(key='startDateTime', value=format_time(value))
-    if key == 'event':
-        return fstring.format(key='keyword', value=value)
+    fstring = '&{key}={value}'.format(key=key, value=value)
+    return fstring
 
 
 def get_info(**kwargs):
