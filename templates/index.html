@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>eventBOTSTER</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+.main {
+	height: 100vh;
+}
+
+.vertical-align {
+ position: relative;
+  top: 50%;
+  transform: translateY(-50%);	
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+}
+
+.horizontal-center {
+	display: block;
+  margin-left: auto;
+  margin-right: auto;	
+	}
+.btn-center {
+	display:table; 
+	margin:0 auto; 
+}
+
+input:focus {
+outline: none;
+}
+	
+input {
+	font-size: 5vw;
+	text-align: center;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	border-bottom: 2px solid rgba(33, 33, 33, 0.56);
+	color: #212121;
+	padding-bottom: 1.5vw;
+	letter-spacing: -.3vw;
+	font-family: Helvetica;
+	font-weight: 100;
+	}
+</style>
+</head>
+<body>
+<div class="main">
+	<form id="form" class="btn-center vertical-align" method="post" action="0.0.0.0.">
+		<input id="userIn" placeholder="what are you looking for?" type="text" name="userIn">
+	</form>
+</div>
+<script>
+	$(document).ready(function() {
+		var input = $("#userIn").val;
+		$( "#userIn" ).focusin(function() {
+  			$( this ).attr("placeholder", "");
+		});
+		
+		$( "#userIn" ).focusout(function() {
+  			$( this ).attr("placeholder", "what are you looking for?");
+		});
+		
+		$('#userIn').keypress(function (e) {
+			  if (e.which == 13) {
+					if (form[0].value != "" || form[0].value != " ") {
+						form.submit();
+						return false;
+					}
+			  }
+		});
+		//submission
+	
+	});
+</script>
+</body>
+</html>
