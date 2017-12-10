@@ -20,14 +20,13 @@ def preprocess_text(s):
 
 def calculate_similarity(usr, intent_name):
     return np.array([usr.similarity(preprocess_text(ex))  \
-                    for ex in intents[intent_name]]).max()
+        for ex in intents[intent_name]]).max()
 
 
 def analyze_similarities(usr):
     ret = {}
     for name in intents.keys():
         ret[name] = calculate_similarity(usr, name)
-    print(ret)
     return ret
 
 

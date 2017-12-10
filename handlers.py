@@ -4,10 +4,12 @@
 Handles each intent defined in examples.txt
 """
 from parser import keywords, parse_keywords
-from dates import DAYS_OF_WEEK, MODIFIERS, date_diff, add_days
+from dates import DAYS_OF_WEEK, MODIFIERS, set_timezone, date_diff, add_days
 from tm import get_info
 from database import extract_columns, store_data, find_data
 from nlp import preprocess_text
+
+set_timezone('EST')
 
 
 def format_time(dt):
@@ -27,11 +29,12 @@ def any_event_on_day_intent_handler(doc):
             dow = DAYS_OF_WEEK[tok.text]
 
     diff = date_diff(modifier, dow)
-    target_date = format_time(add_days(diff))  # Add timezone info
+    target_date = format_time(add_days(diff))
 
     r = get_info(startDateTime=target_date)
     data = extract_columns(r.json())
-    data['std_time'] = target_date
+    for i in data:
+        i['std_time'] = target_date
     store_data(data)
     return data
 
@@ -52,11 +55,12 @@ def specific_event_on_day_intent_handler(doc):
             et = tok.text
 
     diff = date_diff(modifier, dow)
-    target_date = add_days(diff)  # Add timezone info
+    target_date = format_time(add_days(diff))  # Add timezone info
 
-    r = get_info(startDateTime=format_time(target_date, False), keyword=et)
+    r = get_info(startDateTime=target_date, keyword=et)
     data = extract_columns(r.json())
-    data['std_time'] = target_date
+    for i in data:
+        i['std_time'] = target_date
     store_data(data)
     return data
 

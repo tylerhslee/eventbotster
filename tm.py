@@ -3,7 +3,7 @@
 import requests
 
 URL = ('https://app.ticketmaster.com/discovery/v2/events.json' +
-       '?size=1&apikey=80Yiy3BkF0kupWGVzo75UtuPdt1Vu1V3' +
+       '?apikey=80Yiy3BkF0kupWGVzo75UtuPdt1Vu1V3' +
        '&countryCode=US&stateCode=NY')
 
 

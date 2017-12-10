@@ -3,11 +3,19 @@
 """
 Date functions
 """
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta
+from pytz import timezone
+
+TIMEZONE = timezone('UTC')
 
 
-def today(tz=timezone.utc):
-    return datetime.now(tz)
+def set_timezone(tz):
+    global TIMEZONE
+    TIMEZONE = timezone(tz)
+
+
+def today():
+    return datetime.now(TIMEZONE)
 
 
 def date_diff(modifier, dow):
@@ -15,8 +23,8 @@ def date_diff(modifier, dow):
     return (dow + modifier * 7) - t
 
 
-def add_days(days, tz=timezone.utc):
-    return (today(tz) + timedelta(days=days)).replace(hour=0, minute=0, second=0)
+def add_days(days):
+    return (today() + timedelta(days=days)).replace(hour=0, minute=0, second=0)
 
 
 # Export

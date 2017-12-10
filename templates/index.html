@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <title>eventBOTSTER</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  // Variables passed from Flask
+  var SHOULD_SHOW_TABLE = ('{{ show_data }}' == 'true');
+  var RETURNED_DATA = '{{ data | safe }}';
+
+  console.log(SHOULD_SHOW_TABLE);
+  console.log(RETURNED_DATA);
+</script>
+<script type="text/javascript" src="static/index.js"></script>
+
 <style>
 .main {
 	height: 100vh;
@@ -34,48 +44,41 @@ outline: none;
 }
 	
 input {
-	font-size: 5vw;
-	text-align: center;
-	border: 0;
-	outline: 0;
-	background: transparent;
-	border-bottom: 2px solid rgba(33, 33, 33, 0.56);
-	color: #212121;
-	padding-bottom: 1.5vw;
-	letter-spacing: -.3vw;
-	font-family: Helvetica;
-	font-weight: 100;
-	}
+  font-size: 5vw;
+  text-align: center;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 2px solid rgba(33, 33, 33, 0.56);
+  color: #212121;
+  padding-bottom: 1.5vw;
+  letter-spacing: -.3vw;
+  font-family: Helvetica;
+  font-weight: 100;
+}
 </style>
 </head>
+
 <body>
 <div class="main">
-	<form id="form" class="btn-center vertical-align" method="post" action="0.0.0.0.">
-		<input id="userIn" placeholder="what are you looking for?" type="text" name="userIn">
-	</form>
+  <form id="form" class="btn-center vertical-align" method="post" action="http://localhost:5000/">
+    <input id="userIn" placeholder="what are you looking for?" type="text" name="userIn">
+  </form>
+
+  <table class="data">
+    <th>
+      <td>Title</td>
+      <td>URL</td>
+      <td>Start Date</td>
+      <td>Category</td>
+      <td>Minimum Price</td>
+      <td>Maximum Price</td>
+      <td>Zipcode</td>
+      <td>Venue</td>
+    </th>
+    <tbody>
+    </tbody>
+  </table>
 </div>
-<script>
-	$(document).ready(function() {
-		var input = $("#userIn").val;
-		$( "#userIn" ).focusin(function() {
-  			$( this ).attr("placeholder", "");
-		});
-		
-		$( "#userIn" ).focusout(function() {
-  			$( this ).attr("placeholder", "what are you looking for?");
-		});
-		
-		$('#userIn').keypress(function (e) {
-			  if (e.which == 13) {
-					if (form[0].value != "" || form[0].value != " ") {
-						form.submit();
-						return false;
-					}
-			  }
-		});
-		//submission
-	
-	});
-</script>
 </body>
 </html>
