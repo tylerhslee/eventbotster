@@ -18,20 +18,21 @@ def preprocess_text(s):
     return nlp(' '.join([t.lemma_ for t in doc if t.pos_ != 'PUNCT']))
 
 
-def calculate_similarity(usr, intent_name):
-    return np.array([usr.similarity(preprocess_text(ex))  \
+def calculate_similarity(doc, intent_name):
+    return np.array([doc.similarity(preprocess_text(ex))  \
         for ex in intents[intent_name]]).max()
 
 
-def analyze_similarities(usr):
+def analyze_similarities(doc):
     ret = {}
     for name in intents.keys():
-        ret[name] = calculate_similarity(usr, name)
+        ret[name] = calculate_similarity(doc, name)
     return ret
 
 
 def select_most_likely_intent(usr):
-    sims = analyze_similarities(usr)
+    doc = preprocess_text(usr)
+    sims = analyze_similarities(doc)
     max_sim = max(list(sims.values()))
     
     if max_sim < 0.90:

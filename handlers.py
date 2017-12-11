@@ -17,10 +17,12 @@ def format_time(dt):
     return dt.strftime('%Y-%m-%dT%H:%m:%SZ')
 
 
-def any_event_on_day_intent_handler(doc):
+def any_event_on_day_intent_handler(s):
     """
     Handles AnyEventOnDayIntent
     """
+    doc = preprocess_text(s)
+
     modifier = MODIFIERS['this']
     for tok in doc:
         if tok.text in parse_keywords(keywords, 'modifier'):
@@ -39,12 +41,14 @@ def any_event_on_day_intent_handler(doc):
     return data
 
 
-def specific_event_on_day_intent_handler(doc):
+def specific_event_on_day_intent_handler(s):
     """
     Handles SpecificEventOnDayIntent
     Always fetches the API because we can't store
     "keyword" column in the database.
     """
+    doc = preprocess_text(s)
+
     modifier = MODIFIERS['this']
     for tok in doc:
         if tok.text in parse_keywords(keywords, 'modifier'):
@@ -65,12 +69,14 @@ def specific_event_on_day_intent_handler(doc):
     return data
 
 
-def event_info_intent_handler(doc):
+def event_info_intent_handler(s):
     """
     Handles EventInfoIntent
     Gives the information on an event from the database
     If the event is not found in the database, it will fetch the API.
     """
+    doc = preprocess_text(s)
+
     for title in parse_keywords(keywords, 'title'):
         if str(preprocess_text(title)) in str(doc):
             data = find_data(title=title)

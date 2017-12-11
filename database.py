@@ -21,9 +21,8 @@ cursor.execute(create_db_query)
 
 table_name = 'event_bot'
 create_table_query = '''CREATE TABLE IF NOT EXISTS {db}.{table}
-                                (id int NOT NULL AUTO_INCREMENT,
-                                title VARCHAR(100),
-                                url VARCHAR(1000),
+                                (title VARCHAR(100),
+                                url VARCHAR(1000) NOT NULL,
                                 start_time VARCHAR(100),
                                 std_time VARCHAR(100),
                                 category VARCHAR(100),
@@ -33,7 +32,7 @@ create_table_query = '''CREATE TABLE IF NOT EXISTS {db}.{table}
                                 venue VARCHAR(100),
                                 lon VARCHAR(100),
                                 lat VARCHAR(100),
-                                PRIMARY KEY(id)
+                                PRIMARY KEY(url)
                                 )'''.format(db=db_name, table=table_name)
 cursor.execute(create_table_query)
 cursor.close()
@@ -84,7 +83,6 @@ def extract_columns(json):
 
 
 def store_data(data):
-    print(data)
     num_rows = len(data)
     values = ', '.join(['(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'] * num_rows)
     query_template = '''INSERT IGNORE INTO {db}.{table}(title,
@@ -130,9 +128,8 @@ def find_data(**kwargs):
     con.commit()
     data = cursor.fetchall()
     ret = []
-    for (id, title, url, start_time, std_time, category, min_price, max_price, zip_code, venue, lon, lat) in data:
+    for (title, url, start_time, std_time, category, min_price, max_price, zip_code, venue, lon, lat) in data:
         ret.append({
-            'id': id,
             'title': title,
             'url': url,
             'start_time': start_time,
