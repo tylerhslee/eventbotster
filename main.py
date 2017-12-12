@@ -20,8 +20,7 @@ def normal_mode():
 
 
 def take_usr_input():
-    text = str(input('Message: '))
-    return preprocess_text(text)
+    return str(input('Message: '))
 
 
 def main(debug=False):

@@ -33,6 +33,7 @@ def analyze_similarities(doc):
 def select_most_likely_intent(usr):
     doc = preprocess_text(usr)
     sims = analyze_similarities(doc)
+    print(sims)
     max_sim = max(list(sims.values()))
     
     if max_sim < 0.90:

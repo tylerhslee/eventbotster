@@ -6,9 +6,9 @@ import urllib.request, json
 import pandas as pd
 import MySQLdb as mdb
 
-con = mdb.connect(host = 'localhost',
-                  user = 'root',
-                  passwd = 'Mr.bean22',
+con = mdb.connect(host = '54.198.181.165',
+                  user = 'finalpadmin',
+                  passwd = 'IWroteAGoodCFE',
                   charset='utf8', use_unicode=True);
 
 # Run a query to create a database that will hold the data
