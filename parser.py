@@ -168,6 +168,7 @@ def parse_keywords(keywords, name):
 # Export
 intents = parse_intents()
 keywords = categorize_keywords()
+print(parse_keywords(keywords, 'title'))
 
 
 if __name__ == '__main__':

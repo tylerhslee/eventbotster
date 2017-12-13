@@ -5,6 +5,9 @@ Connect to the database
 import urllib.request, json
 import pandas as pd
 import MySQLdb as mdb
+from pprint import PrettyPrinter
+
+pp = PrettyPrinter(indent=2)
 
 con = mdb.connect(host = '54.198.181.165',
                   user = 'finalpadmin',
@@ -38,9 +41,19 @@ cursor.execute(create_table_query)
 cursor.close()
 
 
+def extract_data(row, *args):
+    t = row
+    for key in args:
+        try:
+            t = t[key]
+        except KeyError:
+            return 'NA'
+    return t
+
+
 def get_titles():
     cursor = con.cursor()
-    title_query = '''SELECT title FROM `final_project`.`event_bot`'''
+    title_query = '''SELECT title FROM final_project.event_bot'''
     cursor.execute(title_query)
     con.commit()
     data = cursor.fetchall()
@@ -52,17 +65,17 @@ def get_titles():
 def extract_columns(json):
     data = json['_embedded']['events']
 
-    title = [k['name'] for k in data]
+    title = [extract_data(k, 'name') for k in data]
     url = [k['url'] for k in data]
-    start_time = [k['dates']['start']['dateTime'] for k in data]
+    start_time = [extract_data(k, 'dates', 'start', 'dateTime') for k in data]
     category = [k['classifications'][0]['segment']['name'] for k in data]
-    min_price = [k['priceRanges'][0]['min'] for k in data]
-    max_price = [k['priceRanges'][0]['max'] for k in data]
+    min_price = [extract_data(k, 'priceRanges', 0, 'min') for k in data]
+    max_price = [extract_data(k, 'priceRanges', 0, 'max') for k in data]
     zip_code = [k['_embedded']['venues'][0]['postalCode'] for k in data]
     venue = [k['_embedded']['venues'][0]['name'] for k in data]
     lon = [k['_embedded']['venues'][0]['location']['longitude'] for k in data]
     lat = [k['_embedded']['venues'][0]['location']['latitude'] for k in data]
-
+    
     extracted_json = []
     
     for i in range(len(title)):
@@ -78,7 +91,8 @@ def extract_columns(json):
             'lon': lon[i],
             'lat': lat[i]
         })
-
+    pp.pprint(extracted_json[0])
+    
     return extracted_json
 
 

@@ -1,9 +1,13 @@
 <!doctype html>
-<html>
+<html lang="en">
+
 <head>
 <meta charset="UTF-8">
-<title>eventBOTSTER</title>
+<title>EventBotster</title>
+    <h1>EventBotster</h1>    
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 <script>
   // Variables passed from Flask
   var SHOULD_SHOW_TABLE = ('{{ show_data }}' === 'true');
@@ -11,42 +15,45 @@
 
   $(document).ready(function() {
 
-    if (SHOULD_SHOW_TABLE) $( ".data" ).show();
-    else $( ".data" ).hide();
+    if (SHOULD_SHOW_TABLE) $( ".showtime" ).show();
+    else $( ".showtime" ).hide();
    
     data = $.parseJSON(RETURNED_DATA);
     if (data.length > 0) {
       for (var i=0; i<data.length; i++) {
         var title = data[i].title;
         var url = data[i].url;
-        var startDateTime = data[i].start_time;
+        var startDateTime = data[i].start_time.replace('T', ' ').replace('Z', '');
         var category = data[i].category;
         var minPrice = data[i].min_price;
         var maxPrice = data[i].max_price;
         var zipCode = data[i].zip_code;
         var venue = data[i].venue;
         
-        var row = `<tr><td>${i}</td>
-                       <td>${title}</td>
-                       <td><a href="${url}">Link</a></td>
-                       <td>${startDateTime}</td>
-                       <td>${category}</td>
-                       <td>${minPrice}</td>
-                       <td>${maxPrice}</td>
-                       <td>${zipCode}</td>
-                       <td>${venue}</td>
+        var row = `<tr class="clickable-link" id="${url}">
+                     <td>${title}</td>
+                     <td>${startDateTime}</td>
+                     <td>${category}</td>
+                     <td>&#36;${minPrice}</td>
+                     <td>&#36;${maxPrice}</td>
+                     <td>${zipCode}</td>
+                     <td>${venue}</td>
                    </tr>`;
-        $( ".data tbody" ).append(row);
+        $(".table-striped tbody").append(row);
       } 
     }
 
+    $(".clickable-link").click(function () {
+      window.location.href=$(this).attr('id');
+    })
+
     var input = $("#userIn").val;
-    $( "#userIn" ).focusin(function() {
-      $( this ).attr("placeholder", "");
+    $("#userIn").focusin(function() {
+      $(this).attr("placeholder", "");
     });
     
-    $( "#userIn" ).focusout(function() {
-      $( this ).attr("placeholder", "what are you looking for?");
+    $("#userIn").focusout(function() {
+      $(this).attr("placeholder", "what are you looking for?");
     });
     
     $('#userIn').keypress(function (e) {
@@ -60,15 +67,17 @@
 
 });
 </script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
 <style>
-.main {
-	height: 100vh;
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
+
+* {
+  font-family: "Roboto", helvetica, arial, sans-serif;
 }
 
 .vertical-align {
- position: relative;
-  top: 50%;
+  position: middle;
   transform: translateY(-50%);	
   -webkit-transform: translateY(-50%);
   -moz-transform: translateY(-50%);
@@ -77,55 +86,185 @@
 }
 
 .horizontal-center {
-	display: block;
+  display: block;
   margin-left: auto;
   margin-right: auto;	
-	}
+}
+
 .btn-center {
-	display:table; 
-	margin:0 auto; 
+  display: table; 
+  margin: 0 auto; 
+}
+
+.table-striped {
+  color: #ffffff;
+  background-position: center;
+  background-repeat: repeat-y;
+  background-size: cover;
+  background: white;
+  border-radius:3px;
+  border-collapse: collapse;
+  height: 320px;
+  margin: auto;
+  max-width: 1980px;
+  padding:5px;
+  width: 100%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  animation: float 5s infinite;
+  opacity: 0.87;
+}
+
+th {
+  color:#D5DDE5;;
+  background:#1b1e24;
+  border-bottom:4px solid #9ea7af;
+  border-right: 1px solid #343a45;
+  font-size:23px;
+  font-weight: 100;
+  padding:24px;
+  text-align:left;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  vertical-align:middle;
+}
+
+th:first-child {
+  border-top-left-radius:3px;
+}
+ 
+th:last-child {
+  border-top-right-radius:3px;
+  border-right:none;
+}
+  
+tr {
+  border-top: 1px solid #C1C3D1;
+  border-bottom-: 1px solid #C1C3D1;
+  color:#666B85;
+  font-size:16px;
+  font-weight:normal;
+  text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+}
+ 
+tr.clickable-link:hover td {
+  background:#4E5066;
+  color:#FFFFFF;
+  border-top: 1px solid #22262e;
+}
+
+tr:first-child {
+  border-top:none;
+}
+
+tr:last-child {
+  border-bottom:none;
+}
+ 
+tr:nth-child(odd) td {
+  background:#EBEBEB;
+}
+ 
+tr.clickable-link:nth-child(odd):hover td {
+  background:#4E5066;
+}
+
+tr:last-child td:first-child {
+  border-bottom-left-radius:3px;
+}
+ 
+tr:last-child td:last-child {
+  border-bottom-right-radius:3px;
+}
+ 
+td {
+  background:#FFFFFF;
+  padding:20px;
+  text-align:left;
+  vertical-align:middle;
+  font-weight:300;
+  font-size:18px;
+  text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid #C1C3D1;
+
+}
+
+tr.header td {
+  font-weight: bold
 }
 
 input:focus {
-outline: none;
+  outline: none;
 }
-	
+
+
+body, html {
+  background-image: url("https://realdeals.eu.com/wp-content/uploads/2017/11/iStock-533998713-1.jpg");
+  height: 100%; 
+  background-position: center;
+  background-repeat: repeat-y;
+  background-size: cover;
+  font-size: 16px;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+}   
+
+div.container-fluid {
+  background-color: rgba(5,4,2,0.5);
+  width: auto;
+  height: auto;
+  margin-left:auto;
+  margin-right:auto;
+  padding: 15px;
+}
+
+div.table-title {
+  display: block;
+  float: left;
+  margin: auto;
+  max-width: 600px;
+  padding:5px;
+  width: 100%;
+  color:#ffffff
+}
+    
 input {
-  font-size: 5vw;
+  font-size: 3vw;
   text-align: center;
   border: 0;
   outline: 0;
   background: transparent;
-  border-bottom: 2px solid rgba(33, 33, 33, 0.56);
-  color: #212121;
-  padding-bottom: 1.5vw;
+  color: #ffffff;
   letter-spacing: -.3vw;
-  font-family: Helvetica;
   font-weight: 100;
+  padding-top: 200px;
 }
+
 </style>
 </head>
 
 <body>
-<div class="main">
-  <form id="form" class="btn-center vertical-align" method="post" action="http://localhost:5000/">
-    <input id="userIn" placeholder="what are you looking for?" type="text" name="userIn">
+<div class="main">    
+<div class="container-fluid">
+  <form id="form" class="btn-center vertical-align " method="POST">
+    <input id="userIn" placeholder="What are you looking for?" type="text" name="userIn" size="50">
   </form>
-
-  <table class="data">
+  
+  <div class="table-title showtime">
+  </div>
+  <table class="table-striped showtime">
     <thead>
-      <td>Title</td>
-      <td>URL</td>
-      <td>Start Date</td>
-      <td>Category</td>
-      <td>Minimum Price</td>
-      <td>Maximum Price</td>
-      <td>Zipcode</td>
-      <td>Venue</td>
     </thead>
-    <tbody>
+    <tbody class="table-hover">
+      <tr class="header">
+        <td>Title</td>
+        <td>Start DateTime</td>
+        <td>Category</td>
+        <td>Minimum Price</td>
+        <td>Maximum Price</td>
+        <td>Zipcode</td>
+        <td>Venue</td>
+      <tr>
     </tbody>
   </table>
-</div>
+ </div>
 </body>
 </html>
