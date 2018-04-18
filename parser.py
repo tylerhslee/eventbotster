@@ -19,10 +19,10 @@ def add(original, *args):
     return ret
 
 
-with open('examples.txt', 'r') as rf:
+with open('assets/examples.txt', 'r') as rf:
     g_examples = rf.read()
 
-with open('keywords.txt', 'r') as rf:
+with open('assets/keywords.txt', 'r') as rf:
     g_keywords = add(rf.read(), 'title', get_titles())
 
 
