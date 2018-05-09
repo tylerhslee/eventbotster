@@ -9,3 +9,5 @@ $ cd event-bot
 $ pip install -r requirements.txt
 $ ./main.py
 ```
+
+In order to run the website, you need a local MySQL server running and edit the `app.py` script to point the program to your localhost. Then, simply run `app.py`, and go to `localhost:5000`.

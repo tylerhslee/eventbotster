@@ -3,11 +3,11 @@
 """
 Handles each intent defined in examples.txt
 """
-from parser import keywords, parse_keywords
-from dates import DAYS_OF_WEEK, MODIFIERS, set_timezone, date_diff, add_days
-from tm import get_info
-from database import extract_columns, store_data, find_data
-from nlp import preprocess_text
+from .parser import keywords, parse_keywords
+from .dates import DAYS_OF_WEEK, MODIFIERS, set_timezone, date_diff, add_days
+from .tm import get_info
+from .database import extract_columns, store_data, find_data
+from .nlp import preprocess_text
 
 set_timezone('EST')
 

@@ -10,7 +10,7 @@ import re
 import csv
 
 from pprint import PrettyPrinter
-from database import get_titles
+from .database import get_titles
 
 
 def add(original, *args):
@@ -163,7 +163,6 @@ def categorize_keywords():
 def parse_keywords(keywords, name):
     ret = [item for item in csv.reader(keywords[name])]
     return ret[0]
-
 
 # Export
 intents = parse_intents()
